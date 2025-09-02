@@ -8,6 +8,7 @@ import Filter from "./pages/Filter.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
 const App = () => {
   return (
@@ -15,7 +16,7 @@ const App = () => {
       <Toaster />
       <BrowserRouter>
         <Routes>
-           <Route path="/" element={<Root/>} />
+           <Route path="/" element={<LandingPage/>} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/income" element={<Income />} />
           <Route path="/expense" element={<Expense />} />
