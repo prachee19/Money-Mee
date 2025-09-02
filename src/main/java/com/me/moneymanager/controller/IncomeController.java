@@ -25,7 +25,7 @@ public class IncomeController {
     private final IncomeService incomeService;
 
     @PostMapping
-    public ResponseEntity<IncomeDTO> addExpense(@RequestBody IncomeDTO dto) {
+    public ResponseEntity<IncomeDTO> addIncome(@RequestBody IncomeDTO dto) {
         IncomeDTO saved = incomeService.addIncome(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -34,6 +34,11 @@ public class IncomeController {
     public ResponseEntity<List<IncomeDTO>> getIncome() {
         List<IncomeDTO> incomes = incomeService.getCurrentMonthIncomesForCurrentUser();
         return ResponseEntity.ok(incomes);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<IncomeDTO>> getAllIncomes() {
+        return ResponseEntity.ok(incomeService.getAllIncomesForCurrentUser());
     }
 
     @DeleteMapping("/{id}")

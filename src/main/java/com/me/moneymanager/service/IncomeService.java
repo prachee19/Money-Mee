@@ -1,9 +1,16 @@
 package com.me.moneymanager.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +85,56 @@ public class IncomeService {
         List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
                 profile.getId(), startDate, endDate, keyword, sort);
         return list.stream().map(this::toDTO).toList();
+    }
+
+    public List<IncomeDTO> getAllIncomesForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile(); // use profile service
+        List<IncomeEntity> incomes = incomeRepository.findByProfileId(profile.getId()); // get all incomes for profile
+        return incomes.stream()
+                .map(this::toDTO) // use your existing converter
+                .toList();
+    }
+
+    // =======================
+    // Generate Excel for incomes
+    // =======================
+    public ByteArrayInputStream generateIncomeExcel() throws IOException {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfMonth(1);
+        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+
+        // Fetch current month incomes
+        List<IncomeEntity> incomes = incomeRepository.findByProfileIdAndDateBetween(
+                profile.getId(), startDate, endDate);
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+            Sheet sheet = workbook.createSheet("Income");
+
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("ID");
+            headerRow.createCell(1).setCellValue("Name");
+            headerRow.createCell(2).setCellValue("Category");
+            headerRow.createCell(3).setCellValue("Amount");
+            headerRow.createCell(4).setCellValue("Date");
+
+            // Fill data rows
+            int rowIdx = 1;
+            for (IncomeEntity income : incomes) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(income.getId());
+                row.createCell(1).setCellValue(income.getName());
+                row.createCell(2).setCellValue(
+                        income.getCategory() != null ? income.getCategory().getName() : "N/A");
+                row.createCell(3).setCellValue(income.getAmount().doubleValue());
+                row.createCell(4).setCellValue(income.getDate().toString());
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
     }
 
     // helper methods

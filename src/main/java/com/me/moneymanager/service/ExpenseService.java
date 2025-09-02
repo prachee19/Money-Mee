@@ -1,8 +1,11 @@
 package com.me.moneymanager.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -71,6 +74,14 @@ public class ExpenseService {
         return total != null ? total : BigDecimal.ZERO;
     }
 
+    public List<ExpenseDTO> getAllExpensesForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile(); // use profile service
+        List<ExpenseEntity> expenses = expenseRepository.findByProfileId(profile.getId()); // fetch all expenses
+        return expenses.stream()
+                .map(this::toDTO) // use your own DTO converter
+                .toList();
+    }
+
     // filter expenses
     public List<ExpenseDTO> filterExpenses(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
         ProfileEntity profile = profileService.getCurrentProfile();
@@ -109,6 +120,56 @@ public class ExpenseService {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
+    }
+
+    private final IncomeService incomeService; // inject your IncomeService to get total income
+
+    /**
+     * Get spending suggestions for current month
+     */
+    public Map<String, String> getSpendingSuggestions() {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfMonth(1);
+        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+
+        BigDecimal totalIncome = incomeService.getTotalIncomeForCurrentUser();
+
+        List<ExpenseEntity> expenses = expenseRepository.findByProfileIdAndDateBetween(
+                profile.getId(), startDate, endDate);
+
+        Map<String, BigDecimal> categoryTotals = new HashMap<>();
+        for (ExpenseEntity e : expenses) {
+            String cat = e.getCategory() != null ? e.getCategory().getName() : "Uncategorized";
+            categoryTotals.put(cat, categoryTotals.getOrDefault(cat, BigDecimal.ZERO).add(e.getAmount()));
+        }
+
+        Map<String, String> suggestions = new HashMap<>();
+
+        BigDecimal totalExpense = expenses.stream()
+                .map(ExpenseEntity::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal ratio = totalExpense.divide(totalIncome, 2, RoundingMode.HALF_UP);
+        if (ratio.compareTo(new BigDecimal("1.0")) > 0) {
+            suggestions.put("Overall", "You exceeded your income this month!");
+        } else if (ratio.compareTo(new BigDecimal("0.8")) > 0) {
+            suggestions.put("Overall", "You spent over 80% of your income. Consider saving more.");
+        }
+
+        // Category-wise
+        for (Map.Entry<String, BigDecimal> entry : categoryTotals.entrySet()) {
+            BigDecimal catRatio = entry.getValue().divide(totalIncome, 2, RoundingMode.HALF_UP);
+            if (catRatio.compareTo(new BigDecimal("0.2")) > 0) {
+                suggestions.put(entry.getKey(),
+                        "High spending in this category: " + entry.getValue()
+                                + ". It is "
+                                + catRatio.multiply(new BigDecimal("100")).setScale(0, RoundingMode.HALF_UP)
+                                + "% of your income.");
+            }
+        }
+
+        return suggestions;
     }
 
 }

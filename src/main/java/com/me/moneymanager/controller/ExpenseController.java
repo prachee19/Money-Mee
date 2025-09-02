@@ -3,6 +3,7 @@ package com.me.moneymanager.controller;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,20 @@ public class ExpenseController {
         return ResponseEntity.ok(expenses);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ExpenseDTO>> getAllExpenses() {
+        return ResponseEntity.ok(expenseService.getAllExpensesForCurrentUser());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/suggestions")
+    public ResponseEntity<Map<String, String>> getSpendingSuggestions() {
+        Map<String, String> suggestions = expenseService.getSpendingSuggestions();
+        return ResponseEntity.ok(suggestions);
     }
 }
