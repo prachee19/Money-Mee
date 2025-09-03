@@ -57,7 +57,7 @@ const LandingPage = () => {
           <header className="flex justify-between items-center py-6">
             <div className="flex items-center gap-2">
               <HandCoins className="h-8 w-8 text-purple-600" />
-              <h1 className="text-2xl font-bold text-gray-900">Money Manager</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Money Mee</h1>
             </div>
             <nav className="hidden md:flex items-center gap-8 text-gray-600 font-medium">
               <a href="/" className="hover:text-purple-600 transition-colors">Home</a>
@@ -100,7 +100,7 @@ const LandingPage = () => {
             <h3 className="text-2xl font-bold mb-4 text-gray-800">About Money Manager</h3>
             <p className="text-gray-600 mb-4">
            Money Mee is a smart and intuitive platform that helps users track their incomes and expenses, giving clear insights into spending habits.
-This final-year engineering project empowers students and young professionals to take control of their finances, make informed decisions, and build better money management habits — all in a simple, user-friendly interface.
+This project empowers students and young professionals to take control of their finances, make informed decisions, and build better money management habits — all in a simple, user-friendly interface.
             </p>
             <p className="text-right mt-6 font-semibold text-gray-700">-- Prachi </p>
           </div>
