@@ -17,6 +17,14 @@ const Income = () => {
   const [incomeData, setIncomeData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+
+    const [isDownloading, setIsDownloading] = useState(false);
+  const [isEmailing, setIsEmailing] = useState(false);
+
+
+
+
+  
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState({
     show: false,
@@ -121,6 +129,7 @@ const Income = () => {
 
   // ✅ Download Excel
   const handleDownloadIncomeDetails = async () => {
+    setIsDownloading(true);
     try {
       const response = await axiosConfig.get(
         API_ENDPOINTS.INCOME_EXCEL_DOWNLOAD,
@@ -130,7 +139,7 @@ const Income = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", filename); // ✅ fixed
+      link.setAttribute("download", filename); //
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
@@ -141,11 +150,14 @@ const Income = () => {
       toast.error(
         error.response?.data?.message || "Failed to download income"
       );
+    }finally{
+       setIsDownloading(false);
     }
   };
 
   // ✅ Email Income Details
   const handleEmailIncomeDetails = async () => {
+    setIsEmailing(true);
     try {
       const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_INCOME);
       if (response.status === 200) {
@@ -154,6 +166,8 @@ const Income = () => {
     } catch (error) {
       console.error("Error emailing income details:", error);
       toast.error(error.response?.data?.message || "Failed to email income");
+    } finally{
+      setIsEmailing(false);
     }
   };
 
@@ -180,6 +194,8 @@ const Income = () => {
             onDelete={(id) => setOpenDeleteAlert({ show: true, data: id })}
             onDownload={handleDownloadIncomeDetails}
             onEmail={handleEmailIncomeDetails}
+            isDownloading ={isDownloading}
+            isEmailing ={isEmailing}
           />
 
           {/* ✅ Add Income Modal */}
