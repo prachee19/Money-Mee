@@ -1,5 +1,5 @@
 import logo from "./logo.png";
-import login_bg from "./login_bg.jpeg"
+import login_bg from "./MONEY MEE.png"
 import { LayoutDashboard, List, Wallet, Coins ,Filter} from "lucide-react";
 
 
