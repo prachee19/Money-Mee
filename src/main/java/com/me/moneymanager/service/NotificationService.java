@@ -36,10 +36,9 @@ public class NotificationService {
         for (ProfileEntity profile : profiles) {
 
             String body = "Hi " + profile.getFullName() + ",\n\n" +
-                    "This is a friendly reminder to add your income and expenses for today in Money Manager.\n\n" +
-                    "Go to Money Manager: " + frontendUrl + "\n\n" +
+                    "This is a friendly reminder to add your income and expenses for today in Money Mee.\n\n" +
                     "Best regards,\n" +
-                    "Money Manager Team";
+                    "Money Mee Team";
 
             // Assuming you have an email service
             emailService.sendEmail(profile.getEmail(), "Daily Reminder: Add Income & Expenses", body);
@@ -96,7 +95,7 @@ public class NotificationService {
                 String body = "Hi " + profile.getFullName()
                         + ",<br/><br/>Here is a summary of your expenses for today:<br/><br/>"
                         + table
-                        + "<br/><br/>Best regards,<br/>Money Manager Team";
+                        + "<br/><br/>Best regards,<br/>Money Mee Team";
 
                 emailService.sendEmail(profile.getEmail(), "Your Daily Expense Summary", body);
             }
