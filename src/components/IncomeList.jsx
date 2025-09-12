@@ -88,4 +88,3 @@ const IncomeList = ({
 
 export default IncomeList;
 
-export default IncomeList;
