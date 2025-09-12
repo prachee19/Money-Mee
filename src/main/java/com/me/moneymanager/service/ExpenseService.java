@@ -7,6 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +35,8 @@ public class ExpenseService {
     private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
     private final ProfileService profileService;
+    
+    private final IncomeService incomeService; 
 
     // Adds a new expense to the database
     public ExpenseDTO addExpense(ExpenseDTO dto) {
@@ -121,8 +132,7 @@ public class ExpenseService {
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
-
-    private final IncomeService incomeService; // inject your IncomeService to get total income
+// inject your IncomeService to get total income
 
     /**
      * Get spending suggestions for current month
@@ -171,5 +181,43 @@ public class ExpenseService {
 
         return suggestions;
     }
+
+
+  
+ public ByteArrayInputStream generateExpenseExcel() throws IOException {
+        // 1. Get all the expense data
+        List<ExpenseDTO> expenses = getAllExpensesForCurrentUser();
+
+        // 2. Create an in-memory Excel workbook
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            
+            Sheet sheet = workbook.createSheet("Expenses");
+
+            // 3. Create the header row
+            String[] headers = { "ID", "Name", "Category", "Amount", "Date" };
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+            }
+
+            // 4. Populate the data rows
+            int rowIdx = 1;
+            for (ExpenseDTO expense : expenses) {
+                Row row = sheet.createRow(rowIdx++);
+                
+                row.createCell(0).setCellValue(expense.getId());
+                row.createCell(1).setCellValue(expense.getName());
+                row.createCell(2).setCellValue(expense.getCategoryName());
+                row.createCell(3).setCellValue(expense.getAmount().doubleValue());
+                row.createCell(4).setCellValue(expense.getDate().toString());
+            }
+
+            // 5. Write the workbook to the output stream and return it
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+    
 
 }
