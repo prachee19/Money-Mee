@@ -17,6 +17,10 @@ const Expense = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isEmailing, setIsEmailing] = useState(false);
+
   const [openAddExpenseModal, setOpenAddExpenseModal] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState({
     show: false,
@@ -122,6 +126,7 @@ const Expense = () => {
 
   // Download expenses
   const handleDownloadExpenseDetails = async () => {
+      setIsDownloading(true);
     try {
       const response = await axiosConfig.get(API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD, {
         responseType: "blob",
@@ -141,11 +146,14 @@ const Expense = () => {
     } catch (error) {
       console.error("Error downloading expense details", error);
       toast.error(error.response?.data?.message || "Failed to download expense");
+    } finally {
+      setIsDownloading(false); // Set loading to false
     }
   };
 
   // Email expenses
   const handleEmailExpenseDetails = async () => {
+     setIsEmailing(true);
     try {
       const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_EXPENSE);
       if (response.status === 200) {
@@ -154,6 +162,8 @@ const Expense = () => {
     } catch (error) {
       console.error("Error emailing expense details:", error);
       toast.error(error.response?.data?.message || "Failed to email expense");
+    } finally {
+      setIsEmailing(false); // Set loading to false
     }
   };
 
@@ -179,6 +189,9 @@ const Expense = () => {
             onDelete={(id) => setOpenDeleteAlert({ show: true, data: id })}
             onDownload={handleDownloadExpenseDetails}
             onEmail={handleEmailExpenseDetails}
+            isDownloading={isDownloading}
+            isEmailing={isEmailing}
+            
           />
 
           {/* Add Expense Modal */}
