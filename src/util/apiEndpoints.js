@@ -1,5 +1,7 @@
 export const BASE_URL = "https://moneymee.onrender.com";
 const CLOUDINARY_CLOUD_NAME ="dmhja2hlu";
+const CLOUDINARY_UPLOAD_PRESET ="money_mee_present";
+
 
 export const API_ENDPOINTS = {
     LOGIN : "/api/v1.0/login",
