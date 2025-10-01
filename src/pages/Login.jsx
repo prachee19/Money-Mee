@@ -113,7 +113,7 @@ const Login = () => {
               {isLoading ? (
                 <>
                   <LoaderCircle className="animate-spin w-5 h-5" />
-                  Logining In...
+                  Loging In...
                 </>
               ) : (
                 "LOGIN"
