@@ -1,6 +1,6 @@
 export const BASE_URL = "https://moneymee.onrender.com";
-const CLOUDINARY_CLOUD_NAME ="dmhja2hlu";
-const CLOUDINARY_UPLOAD_PRESET ="money_mee_present";
+ export const CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
 
 
 export const API_ENDPOINTS = {
