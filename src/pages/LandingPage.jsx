@@ -97,12 +97,12 @@ const LandingPage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4">
           <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full relative">
             <button onClick={() => setShowAboutModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-800"><X size={24} /></button>
-            <h3 className="text-2xl font-bold mb-4 text-gray-800">About Money Manager</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">About Money Mee</h3>
             <p className="text-gray-600 mb-4">
            Money Mee is a smart and intuitive platform that helps users track their incomes and expenses, giving clear insights into spending habits.
 This project empowers students and young professionals to take control of their finances, make informed decisions, and build better money management habits — all in a simple, user-friendly interface.
             </p>
-            <p className="text-right mt-6 font-semibold text-gray-700">-- Prachi </p>
+            <p className="text-right mt-6 font-semibold text-gray-700"> :) </p>
           </div>
         </div>
       )}
