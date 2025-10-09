@@ -23,7 +23,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 @RestController
 @RequestMapping("/email")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class EmailController {
 
     private final IncomeService incomeService;
