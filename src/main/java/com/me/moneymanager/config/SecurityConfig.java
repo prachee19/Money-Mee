@@ -36,8 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/status", "/health", "/api/v1.0/login", "/api/v1.0/register", "api/v1.0/activate",
-                                        "/api/v1.0/dashboard", "/filter", "/api/v1.0/incomes", "/api/v1.0/expenses")
+                                .requestMatchers("/status", "/health", "/login", "/register", "/activate")
                                 .permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -53,7 +52,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("https://moneymee.netlify.app"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000", "https://moneymee.netlify.app"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         configuration.setExposedHeaders(List.of("Content-Disposition"));
