@@ -18,7 +18,6 @@ import com.me.moneymanager.dto.ProfileDTO;
 import com.me.moneymanager.service.ProfileService;
 
 @RestController
-@RequestMapping("/api/v1.0")
 @RequiredArgsConstructor
 public class ProfileController {
 

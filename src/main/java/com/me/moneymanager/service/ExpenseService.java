@@ -35,8 +35,8 @@ public class ExpenseService {
     private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
     private final ProfileService profileService;
-    
-    private final IncomeService incomeService; 
+
+    private final IncomeService incomeService;
 
     // Adds a new expense to the database
     public ExpenseDTO addExpense(ExpenseDTO dto) {
@@ -96,8 +96,19 @@ public class ExpenseService {
     // filter expenses
     public List<ExpenseDTO> filterExpenses(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
         ProfileEntity profile = profileService.getCurrentProfile();
-        List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
-                profile.getId(), startDate, endDate, keyword, sort);
+        List<ExpenseEntity> list;
+
+        try {
+            BigDecimal amount = new BigDecimal(keyword);
+            list = expenseRepository.findByProfileIdAndDateBetweenAndAmount(
+                    profile.getId(), startDate, endDate, amount, sort);
+
+        } catch (NumberFormatException e) {
+            list = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
+                    profile.getId(), startDate, endDate, keyword, sort);
+
+        }
+
         return list.stream().map(this::toDTO).toList();
     }
 
@@ -132,7 +143,7 @@ public class ExpenseService {
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
-// inject your IncomeService to get total income
+    // inject your IncomeService to get total income
 
     /**
      * Get spending suggestions for current month
@@ -182,15 +193,13 @@ public class ExpenseService {
         return suggestions;
     }
 
-
-  
- public ByteArrayInputStream generateExpenseExcel() throws IOException {
+    public ByteArrayInputStream generateExpenseExcel() throws IOException {
         // 1. Get all the expense data
         List<ExpenseDTO> expenses = getAllExpensesForCurrentUser();
 
         // 2. Create an in-memory Excel workbook
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            
+
             Sheet sheet = workbook.createSheet("Expenses");
 
             // 3. Create the header row
@@ -205,7 +214,7 @@ public class ExpenseService {
             int rowIdx = 1;
             for (ExpenseDTO expense : expenses) {
                 Row row = sheet.createRow(rowIdx++);
-                
+
                 row.createCell(0).setCellValue(expense.getId());
                 row.createCell(1).setCellValue(expense.getName());
                 row.createCell(2).setCellValue(expense.getCategoryName());
@@ -218,6 +227,5 @@ public class ExpenseService {
             return new ByteArrayInputStream(out.toByteArray());
         }
     }
-    
 
 }

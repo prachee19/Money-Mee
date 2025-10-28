@@ -82,8 +82,19 @@ public class IncomeService {
     // filter expenses
     public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
         ProfileEntity profile = profileService.getCurrentProfile();
-        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
-                profile.getId(), startDate, endDate, keyword, sort);
+        List<IncomeEntity> list;
+
+        try {
+            BigDecimal amount = new BigDecimal(keyword);
+            list = incomeRepository.findByProfileIdAndDateBetweenAndAmount(
+                    profile.getId(), startDate, endDate, amount, sort);
+
+        } catch (NumberFormatException e) {
+            list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
+                    profile.getId(), startDate, endDate, keyword, sort);
+
+        }
+
         return list.stream().map(this::toDTO).toList();
     }
 
