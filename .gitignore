@@ -1,6 +1,6 @@
-# ----------------------------
-# Node / React (Frontend)
-# ----------------------------
+# =========================
+# 🌐 FRONTEND (React)
+# =========================
 # Logs
 logs
 *.log
@@ -27,37 +27,50 @@ dist-ssr/
 *.sln
 *.sw?
 
-# ----------------------------
-# Java / Spring Boot (Backend)
-# ----------------------------
+# =========================
+# ☕ BACKEND (Spring Boot)
+# =========================
+HELP.md
 target/
-*.class
-*.jar
-*.war
-*.ear
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
 # IDEs
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.idea
+*.iws
 *.iml
-/.project
-/.classpath
-/.settings/
-/.springBeans
+*.ipr
 
-# Maven / Gradle
-.mvn/
-!/.mvn/wrapper/maven-wrapper.jar
-.gradle/
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# ----------------------------
-# Environment files
-# ----------------------------
+# VS Code
+.vscode/
+
+# =========================
+# 🔒 Environment / Secrets
+# =========================
 .env
 .env.local
 .env.production
 .env.development
 
-# ----------------------------
-# System files
-# ----------------------------
+# =========================
+# 🗃️ System files
+# =========================
 Thumbs.db
