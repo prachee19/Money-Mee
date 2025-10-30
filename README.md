@@ -1,12 +1,44 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# MoneyMee
 
-Currently, two official plugins are available:
+MoneyMee is a smart money management web application specially designed for bachelors who often find it difficult to track their money. The app helps users monitor their **expenses**, **income**, and **category-wise insights**, giving them a clear view of where their money goes each month.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+**User Authentication:** Create an account and log in securely.
+**Graphical Insights:** Get a visual overview of your income and expenses through interactive charts.
+**Category Management:** Create and manage categories for your income and expenses.
+**Monthly Tracking:** Add your monthly income and expenses under specific categories.
+**Spending Suggestions:** View category-wise spending percentages to understand where you spend the most.
+**Search Functionality:** Quickly find any specific income or expense transaction.
+**Email Reports:** Download or receive detailed spending reports via email (powered by Apache Mail and Mime Message Service).
+**API Tested:** All APIs are tested using Postman.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Tech Stack
+
+| Layer    | Technology      |
+| -------- | --------------- |
+| Frontend | React.js        |
+| Backend  | Spring Boot     |
+| Security | Spring Security |
+| Database | MySQL (via JPA) |
+| Testing  | Postman         |
+
+ How to Use
+
+1. Create an account using the signup option.
+2. Log in to your account securely.
+3. Create categories for your income and expenses.
+4. Add transactions for your monthly income and expenses.
+5. View graphical insights showing how your money is distributed.
+6. Search specific transactions by name or category.
+7. Download or receive reports through email.
+
+
+## Demo
+
+A demo video of the project progress is available.
+https://drive.google.com/file/d/1fMaeb2IKvvqKrc4tFEH3bk2INjyleJ9Q/view?usp=drive_link
+
+
+
